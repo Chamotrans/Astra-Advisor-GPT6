@@ -79,8 +79,8 @@ manifest = require_mapping(load_json(manifest_path, "plugin manifest"), "plugin 
 require_string(manifest, "name", "plugin manifest", "astra-advisor")
 require_string(manifest, "version", "plugin manifest", "0.2.0")
 require_string(manifest, "description", "plugin manifest")
-require_string(manifest, "homepage", "plugin manifest", "https://github.com/DannyMac180/astra-advisor#readme")
-require_string(manifest, "repository", "plugin manifest", "https://github.com/DannyMac180/astra-advisor")
+require_string(manifest, "homepage", "plugin manifest", "https://github.com/Chamotrans/Astra-Advisor-GPT6#readme")
+require_string(manifest, "repository", "plugin manifest", "https://github.com/Chamotrans/Astra-Advisor-GPT6")
 require_string(manifest, "license", "plugin manifest", "MIT")
 require(manifest.get("skills") == "./skills/", "plugin manifest.skills must be ./skills/")
 keywords = manifest.get("keywords")
@@ -105,7 +105,7 @@ capabilities = interface.get("capabilities")
 require_list_of_strings(capabilities, "plugin manifest.interface.capabilities")
 if isinstance(capabilities, list):
     require({"Interactive", "Write"}.issubset(capabilities), "plugin manifest.interface.capabilities must include Interactive and Write")
-require_string(interface, "websiteURL", "plugin manifest.interface", "https://github.com/DannyMac180/astra-advisor")
+require_string(interface, "websiteURL", "plugin manifest.interface", "https://github.com/Chamotrans/Astra-Advisor-GPT6")
 default_prompt = interface.get("defaultPrompt")
 require_list_of_strings(default_prompt, "plugin manifest.interface.defaultPrompt")
 if isinstance(default_prompt, list):
@@ -208,6 +208,17 @@ for path in plugin.rglob("*"):
     if path.is_file() and path.suffix == ".toml":
         errors.append(f"static role TOML is not allowed: {path.relative_to(plugin)}")
 require(not (plugin / "scripts" / "install-agents.sh").exists(), "companion installer is not allowed")
+
+# Current routing must never drift back to older model IDs in active instructions.
+allowed_models = {"gpt-6-astra", "gpt-6.1-sol", "gpt-6-sol", "gpt-6-luna"}
+for path in (skill_path, operations_path, readme_path, manifest_path):
+    content = path.read_text(encoding="utf-8")
+    referenced_models = set(re.findall(r"gpt-[a-z0-9.]+(?:-[a-z0-9]+)*", content))
+    require(referenced_models == allowed_models, f"{path.name}: active model references must equal {sorted(allowed_models)}, got {sorted(referenced_models)}")
+for path in (skill_path, operations_path):
+    require("agent_type: default" in path.read_text(encoding="utf-8"), f"{path.name}: generic dispatch must not use a model-pinned custom role")
+current_pricing = require_mapping(load_json(plugin / "pricing" / "2026-10-05-unverified.json", "current pricing status"), "current pricing status")
+require(not current_pricing.get("models"), "unverified current pricing must not reuse archived model rates")
 
 # Exercise accounting behavior as part of the same local and CI verifier.
 result = subprocess.run(

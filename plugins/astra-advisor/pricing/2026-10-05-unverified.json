@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-05",
+  "verified_on": "unavailable",
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "eligibility": "standard_short_context",
+  "implementation_max_input_tokens": 128000,
+  "models": {},
+  "provenance": {
+    "method": "Local routing migration; no new API rates verified.",
+    "notice": "Rates unavailable for current routing; historical rates must not be substituted."
+  }
+}

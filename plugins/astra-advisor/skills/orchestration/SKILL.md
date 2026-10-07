@@ -28,9 +28,10 @@ say that it is unobservable; never claim a runtime pin that was not confirmed. R
 [the operations reference](references/operations.md) before the first delegation.
 
 Use the generic `collaboration.spawn_agent` tool only when it is exposed by the
-current tool schema. Each selected subagent must receive an explicit `model`, an
+current tool schema. Use `agent_type: default` so a custom role cannot override the selected model.
+Each selected subagent must receive an explicit `model`, an
 explicit supported `reasoning_effort`, and `fork_turns: none`. Choose dynamically
-among `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna` from the task's risk,
+among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
 context, and independent work available; do not encode a role-to-model mapping or a
 fixed number of subagents. Give every subagent a concrete, bounded, independent
 deliverable while Astra continues useful parent work. Do not duplicate the parent's
@@ -45,7 +46,7 @@ omitted runtime field; it cannot replace an available public contract.
 
 For a substantial implementation, Astra must inspect the complete diff and rerun the
 requested checks before starting a fresh read-only review. The reviewer may be any of
-the three supported subagent models, selected dynamically with explicit model and
+the four supported subagent models, selected dynamically with explicit model and
 effort controls. Give it the actual change set and evidence, and require:
 
 ~~~text
@@ -63,8 +64,7 @@ new fresh review. A reviewer remains read-only and never fixes its own findings.
 Use native Codex subagents in the ChatGPT app when the exposed interface supports the
 needed controls. Separate app tasks require an explicit user request. For an explicit
 Codex app task, `mcp__codex_app__create_thread` supports `model` and `thinking`; call
-`mcp__codex_app__list_projects` first for project targets, using a worktree by default
-for Git projects and local otherwise. ChatGPT Work cloud `create_thread` must omit
+`mcp__codex_app__list_projects` first for project targets, using local by default and a worktree only when explicitly requested. ChatGPT Work cloud `create_thread` must omit
 `model` and `thinking`, so it cannot currently promise arbitrary model or effort
 control; do not dispatch a model-pinned request there by default or use an API-key/CLI
 workaround. Use a future native work tool only when its schema exposes the required
@@ -93,6 +93,8 @@ difference a **same-token API price comparison**, never measured all-Astra behav
 actual net task savings, subscription charges, or improved quality/speed. If parent
 usage is missing, label any available delegated-only comparison separately. With no
 subagents there are no delegation savings. Effort is metadata, not a price multiplier.
-Use the versioned snapshot and disclose its date and promotional Sol pricing. Reject
-unsupported pricing regimes rather than silently using standard rates. An illustrative
+Use a newly verified snapshot for the current models and disclose its date. Until
+current rates are verified, report pricing as unavailable; never relabel archived
+rates or promotional status for new models. Reject unsupported pricing regimes
+rather than silently using standard rates. An illustrative
 fixture is optional and must remain separate from this task's receipt.

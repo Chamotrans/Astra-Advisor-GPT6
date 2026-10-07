@@ -35,11 +35,13 @@ independent deliverable from the task's risk, context, and available work. Pass 
 chosen values explicitly:
 
 ~~~text
+agent_type: default
 model: <selected supported model>
 reasoning_effort: <selected supported effort>
 fork_turns: none
 ~~~
 
+Use `agent_type: default`; custom role model pins can ignore explicit model overrides.
 Include a task name and a message that states the bounded ownership and expected
 return. For example, this is one illustrative request shape; the model and effort
 must be selected afresh for the actual task:
@@ -47,8 +49,9 @@ must be selected afresh for the actual task:
 ~~~json
 {
   "task_name": "inspect_auth_boundary",
+  "agent_type": "default",
   "message": "Inspect the auth boundary in the owned files. Return findings, exact file references, and the checks you ran; do not edit outside that boundary.",
-  "model": "gpt-5.6-luna",
+  "model": "gpt-6-luna",
   "reasoning_effort": "max",
   "fork_turns": "none"
 }
@@ -70,12 +73,14 @@ selection, not a contract that overrides live tool metadata:
 
 | Model | Efforts known in the current snapshot |
 | --- | --- |
-| `gpt-5.6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
-| `gpt-5.6-terra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
-| `gpt-5.6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
+| `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
 
-Inspect the current tool metadata when selecting and invoking a subagent. A changed
-live capability list wins over this snapshot. If the selected model, effort, explicit
+Inspect the current tool metadata when selecting and invoking a subagent. Live capabilities may narrow this allowed set; they do not authorize older or
+unlisted models. Reuse `gpt-6-astra` only for a bounded independent task, not to
+repeat parent work. If the selected model, effort, explicit
 spawn control, or required tool is unavailable, conflicting, or unobservable, fail
 the affected delegation closed. Continue safe parent work when possible and report
 the limitation; never silently substitute another model, effort, or tool.
@@ -88,7 +93,7 @@ the source of each value. Chosen values are not the same as runtime-confirmed va
 
 For substantial implementation, the parent first inspects the complete accumulated
 diff and reruns the requested checks. It then starts a fresh read-only reviewer in a
-new context. The reviewer can be `gpt-5.6-sol`, `gpt-5.6-terra`, or `gpt-5.6-luna`,
+new context. The reviewer can be `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, or `gpt-6-luna`,
 with an effort supported by live metadata, and must receive the exact change set,
 interfaces, constraints, and verification evidence. Ask it to return:
 
@@ -112,8 +117,7 @@ it was observed.
 Native Codex subagents in the ChatGPT app are usable when the exposed tool schema
 provides the needed controls. Separate app tasks require an explicit user request.
 For an explicit Codex app project task, `mcp__codex_app__create_thread` supports
-`model` and `thinking`; call `mcp__codex_app__list_projects` first, use a worktree by
-default when the selected project is a Git repository, and use local otherwise.
+`model` and `thinking`; call `mcp__codex_app__list_projects` first, use local by default, and use a worktree only when explicitly requested.
 Follow any explicit starting-state request exactly.
 
 ChatGPT Work cloud `create_thread` does not accept `model` or `thinking`; omit both.
@@ -157,7 +161,9 @@ No API keys, external inference CLIs, billing-account queries, or dashboard are 
 Every task completion requires a visible receipt, including a task with no delegation
 or no accessible token telemetry. The calculator is Python standard library only:
 [calculator](../../../scripts/cost_receipt.py),
-[pricing snapshot](../../../pricing/2026-09-04.json).
+[current pricing status](../../../pricing/2026-10-05-unverified.json).
+The archived [historical snapshot](../../../pricing/2026-09-04.json) is only for
+old accounting fixtures; never reuse its rates for newly routed models.
 Resolve these paths relative to this installed reference, not a guessed cache version.
 
 Use only non-overlapping observed usage with an explicit source. Cumulative telemetry
@@ -173,11 +179,9 @@ never add them a second time. Explicit per-call standard short-context eligibili
 is required; unknown or unsupported long-context, service-tier, or cache-write pricing
 must not silently inherit standard rates. Effort is recorded without a rate multiplier.
 
-The snapshot records USD per million tokens and official source URLs, with a
-2026-09-04 verification date supplied by the recording coordinator. It is a historical
-snapshot, not a live-price guarantee; Sol rates are promotional. Disclose the snapshot
-date and freshness when showing an estimate. Use a newly verified versioned snapshot
-if current prices are required. Do not silently change historical receipts.
+Current routed-model rates have not been verified. The default pricing status has
+no rates, so the calculator returns unavailable until a newly verified snapshot is
+supplied with `--pricing`. Do not copy or relabel the archived model rates.
 
 ~~~text
 API-EQUIVALENT COST RECEIPT

@@ -267,6 +267,23 @@ class CostReceiptTests(unittest.TestCase):
         self.assertEqual(result["calls"][1]["status"], "estimated")
         self.assertEqual(result["same_token_api_price_comparison"]["status"], "unavailable")
 
+    def test_current_routing_without_verified_rates_is_unavailable(self) -> None:
+        payload = whole_task()
+        payload["calls"][1]["model"] = "gpt-6-luna"
+        payload["calls"][2]["model"] = "gpt-6.1-sol"
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "usage.json"
+            source.write_text(json.dumps(payload), encoding="utf-8")
+            completed = subprocess.run(
+                [sys.executable, str(SCRIPT), str(source)], capture_output=True, text=True,
+            )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        result = json.loads(completed.stdout)
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIsNone(result["known_routed_cost_usd"])
+        self.assertNotIn("routed_api_price_usd", result)
+        self.assertEqual(result["pricing"]["verified_on"], "unavailable")
+
     def test_cli_outputs_json_and_honors_optional_pricing_path(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(SCRIPT), str(EXAMPLE), "--pricing", str(PRICING)],

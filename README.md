@@ -1,5 +1,7 @@
 # Astra Advisor
 
+GPT-6 routing edition maintained by Chamotrans, based on [DannyMac180/astra-advisor](https://github.com/DannyMac180/astra-advisor).
+
 **GPT-6 Astra plans the work, chooses useful bounded delegation dynamically, and
 owns verification and acceptance.**
 
@@ -17,19 +19,23 @@ where the current tool schema exposes the needed controls.
 
 ## Go deeper
 
-I write [Attention Heads](https://attentionheads.substack.com/) — deep,
+Original author Daniel McAteer writes [Attention Heads](https://attentionheads.substack.com/) — deep,
 evidence-backed writing on AI, cognition, and agentic engineering. The **Agentic
 Engineering Field Notes** series covers the craft of using AI. [Subscribe](https://attentionheads.substack.com/subscribe?utm_source=github&utm_medium=readme&utm_campaign=astra-advisor)
 to get new posts in your inbox.
 
 ## Quick start
 
+If a marketplace named `astra-advisor` is already registered from another source,
+remove that marketplace before adding this fork. Existing local installations can
+continue using their local source.
+
 Install the plugin in a current Codex CLI or ChatGPT desktop app with plugins
 enabled. Start a fresh task after installation and select GPT-6 Astra at any effort
 supported by the current Codex host:
 
 ~~~sh
-codex plugin marketplace add DannyMac180/astra-advisor --ref main
+codex plugin marketplace add Chamotrans/Astra-Advisor-GPT6 --ref main
 codex plugin add astra-advisor@astra-advisor
 ~~~
 
@@ -48,7 +54,7 @@ delegation begins. The skill never changes the parent session.
 
 When delegation helps, Astra uses the exposed generic `collaboration.spawn_agent`
 tool with an explicit `model`, `reasoning_effort`, and `fork_turns: none`. It chooses
-among `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna` from the task's risk,
+among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
 context, and independent work. There are no predefined role TOMLs, companion
 installer, role-to-model mapping, or fixed subagent count cap. Astra gives each
 subagent a concrete bounded deliverable and continues useful parent work while it
@@ -58,9 +64,10 @@ Live tool metadata is authoritative. The current documented effort snapshot is:
 
 | Model | Known efforts |
 | --- | --- |
-| `gpt-5.6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
-| `gpt-5.6-terra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
-| `gpt-5.6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
+| `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
 
 If a selected model, effort, control, or tool is unavailable, conflicting, or
 unobservable, Astra fails that delegation closed and reports the limitation. It does
@@ -69,7 +76,7 @@ runtime-confirmed values are reported separately.
 
 For substantial implementation, Astra inspects the complete diff and reruns the
 requested checks, then sends the accumulated change set to a fresh read-only
-reviewer. The reviewer can be any of the three supported models at a live-supported
+reviewer. The reviewer can be any of the four supported models at a live-supported
 effort. Astra accepts the work only after the reviewer returns `ship`; `fix-first`
 requires a new parent verification and fresh review, while `rethink` requires a
 revised plan.
@@ -92,13 +99,10 @@ all-Astra run would actually consume, actual net task savings, quality, speed, o
 change to ChatGPT subscription charges or usage credits. No subagents means no
 delegation savings. Reasoning effort does not multiply the token price.
 
-The [pricing snapshot](plugins/astra-advisor/pricing/2026-09-04.json) records official
-source URLs and standard short-context USD rates per million tokens, verified by
-the recording coordinator on September 4, 2026. These are historical estimates;
-Sol pricing is promotional and may change. The calculator rejects unsupported
-long-context, service-tier, and cache-write cases instead of assuming standard rates.
-It conservatively supports at most 128,000 input tokens per call; this is an
-implementation support boundary, not a claimed official pricing threshold.
+Current model rates are unavailable until a new verified pricing snapshot is supplied.
+The calculator defaults to [unverified pricing status](plugins/astra-advisor/pricing/2026-10-05-unverified.json),
+which contains no rates. The archived [September snapshot](plugins/astra-advisor/pricing/2026-09-04.json)
+remains only for historical accounting fixtures. Do not relabel old rates for new models.
 
 Try the clearly labeled illustrative workload (not a receipt for your task):
 
@@ -118,12 +122,14 @@ for the input contract and receipt policy.
 
 Separate app tasks require an explicit user request. For an explicit Codex app task,
 `mcp__codex_app__create_thread` supports `model` and `thinking`; call
-`mcp__codex_app__list_projects` first for project targets, use a worktree by default
-for Git projects, and use local otherwise. Cloud `create_thread` omits both controls,
+`mcp__codex_app__list_projects` first for project targets, use local by default, and use a worktree only when explicitly requested. Cloud `create_thread` omits both controls,
 so the bounded limitation above applies. Do not use an API key, nested CLI, or
 invented tool as a workaround.
 
 ## Updating
+
+Update this fork and reinstall the plugin, then start a fresh task. Switching the
+marketplace to the upstream repository replaces this edition's GPT-6 routing.
 
 ~~~sh
 codex plugin marketplace upgrade astra-advisor
