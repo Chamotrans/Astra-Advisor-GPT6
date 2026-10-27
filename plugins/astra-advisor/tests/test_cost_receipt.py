@@ -284,6 +284,22 @@ class CostReceiptTests(unittest.TestCase):
         self.assertNotIn("routed_api_price_usd", result)
         self.assertEqual(result["pricing"]["verified_on"], "unavailable")
 
+    def test_terra_61_usage_preserves_model_without_borrowing_archived_rates(self) -> None:
+        payload = whole_task()
+        payload["calls"][1]["model"] = "gpt-6.1-terra"
+        payload["calls"][1]["effort"] = "ultra"
+        for pricing in (PRICING, PLUGIN / "pricing" / "2026-10-05-unverified.json"):
+            with self.subTest(pricing=pricing.name):
+                result = cost_receipt.calculate_receipt(payload, pricing)
+                call = result["calls"][1]
+                self.assertEqual(call["model"], "gpt-6.1-terra")
+                self.assertEqual(call["effort"], "ultra")
+                self.assertEqual(call["input_tokens"], 2000)
+                self.assertEqual(call["status"], "unavailable")
+                self.assertEqual(call["reason"], "no rate for model gpt-6.1-terra")
+                self.assertNotIn("cost_usd", call)
+                self.assertEqual(result["same_token_api_price_comparison"]["status"], "unavailable")
+
     def test_cli_outputs_json_and_honors_optional_pricing_path(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(SCRIPT), str(EXAMPLE), "--pricing", str(PRICING)],

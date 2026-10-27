@@ -54,7 +54,7 @@ delegation begins. The skill never changes the parent session.
 
 When delegation helps, Astra uses the exposed generic `collaboration.spawn_agent`
 tool with an explicit `model`, `reasoning_effort`, and `fork_turns: none`. It chooses
-among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
+among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
 context, and independent work. There are no predefined role TOMLs, companion
 installer, role-to-model mapping, or fixed subagent count cap. Astra gives each
 subagent a concrete bounded deliverable and continues useful parent work while it
@@ -66,8 +66,13 @@ Live tool metadata is authoritative. The current documented effort snapshot is:
 | --- | --- |
 | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6.1-terra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
+
+Terra 6.1 is available for scoped code fixes, visual reasoning, computer use, and
+writing from supplied material. Its listed efforts were observed in Codex on
+2026-10-27; API effort settings differ. Always use the live native tool schema.
 
 If a selected model, effort, control, or tool is unavailable, conflicting, or
 unobservable, Astra fails that delegation closed and reports the limitation. It does
@@ -76,7 +81,7 @@ runtime-confirmed values are reported separately.
 
 For substantial implementation, Astra inspects the complete diff and reruns the
 requested checks, then sends the accumulated change set to a fresh read-only
-reviewer. The reviewer can be any of the four supported models at a live-supported
+reviewer. The reviewer can be any of the five supported models at a live-supported
 effort. Astra accepts the work only after the reviewer returns `ship`; `fix-first`
 requires a new parent verification and fresh review, while `rethink` requires a
 revised plan.

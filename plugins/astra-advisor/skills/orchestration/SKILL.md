@@ -31,11 +31,13 @@ Use the generic `collaboration.spawn_agent` tool only when it is exposed by the
 current tool schema. Use `agent_type: default` so a custom role cannot override the selected model.
 Each selected subagent must receive an explicit `model`, an
 explicit supported `reasoning_effort`, and `fork_turns: none`. Choose dynamically
-among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
+among `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`, `gpt-6-sol`, and `gpt-6-luna` from the task's risk,
 context, and independent work available; do not encode a role-to-model mapping or a
 fixed number of subagents. Give every subagent a concrete, bounded, independent
 deliverable while Astra continues useful parent work. Do not duplicate the parent's
-implementation or verification in a subagent.
+implementation or verification in a subagent. Consider Terra 6.1 for scoped code
+fixes, visual reasoning, computer use, or writing from supplied material; it is
+also eligible for a bounded review when its capabilities fit the review risk.
 
 Tools and their public schemas are authoritative. Select only an effort the current
 tool exposes. If a selected model, effort, spawn control, or required native tool is
@@ -46,7 +48,7 @@ omitted runtime field; it cannot replace an available public contract.
 
 For a substantial implementation, Astra must inspect the complete diff and rerun the
 requested checks before starting a fresh read-only review. The reviewer may be any of
-the four supported subagent models, selected dynamically with explicit model and
+the five supported subagent models, selected dynamically with explicit model and
 effort controls. Give it the actual change set and evidence, and require:
 
 ~~~text

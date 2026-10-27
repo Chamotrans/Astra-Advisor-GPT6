@@ -77,7 +77,7 @@ manifest_path = plugin / ".codex-plugin" / "plugin.json"
 manifest = require_mapping(load_json(manifest_path, "plugin manifest"), "plugin manifest")
 
 require_string(manifest, "name", "plugin manifest", "astra-advisor")
-require_string(manifest, "version", "plugin manifest", "0.2.0")
+require_string(manifest, "version", "plugin manifest", "0.2.1")
 require_string(manifest, "description", "plugin manifest")
 require_string(manifest, "homepage", "plugin manifest", "https://github.com/Chamotrans/Astra-Advisor-GPT6#readme")
 require_string(manifest, "repository", "plugin manifest", "https://github.com/Chamotrans/Astra-Advisor-GPT6")
@@ -210,7 +210,7 @@ for path in plugin.rglob("*"):
 require(not (plugin / "scripts" / "install-agents.sh").exists(), "companion installer is not allowed")
 
 # Current routing must never drift back to older model IDs in active instructions.
-allowed_models = {"gpt-6-astra", "gpt-6.1-sol", "gpt-6-sol", "gpt-6-luna"}
+allowed_models = {"gpt-6-astra", "gpt-6.1-sol", "gpt-6.1-terra", "gpt-6-sol", "gpt-6-luna"}
 for path in (skill_path, operations_path, readme_path, manifest_path):
     content = path.read_text(encoding="utf-8")
     referenced_models = set(re.findall(r"gpt-[a-z0-9.]+(?:-[a-z0-9]+)*", content))

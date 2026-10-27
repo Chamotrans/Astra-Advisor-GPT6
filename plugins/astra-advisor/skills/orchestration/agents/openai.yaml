@@ -1,4 +1,4 @@
 interface:
   display_name: "Astra Advisor Orchestration"
-  short_description: "Astra chooses Astra, Sol 6.1, Sol 6, or Luna 6"
+  short_description: "Astra chooses Astra, Sol, Terra 6.1, or Luna"
   default_prompt: "Use $astra-advisor:orchestration to plan, build, verify, and review this work."

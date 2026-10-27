@@ -75,10 +75,27 @@ selection, not a contract that overrides live tool metadata:
 | --- | --- |
 | `gpt-6-astra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6.1-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
+| `gpt-6.1-terra` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6-sol` | `low`, `medium`, `high`, `xhigh`, `max`, `ultra` |
 | `gpt-6-luna` | `low`, `medium`, `high`, `xhigh`, `max` |
 
-Inspect the current tool metadata when selecting and invoking a subagent. Live capabilities may narrow this allowed set; they do not authorize older or
+Terra 6.1 was observed in the Codex native tool schema on 2026-10-27. Consider it
+for scoped code fixes, visual reasoning, computer use, and writing from supplied
+material. Select effort from the live Codex tool; the
+[API model page](https://developers.openai.com/api/docs/models/gpt-6.1-terra)
+lists a different API effort set and does not override native Codex capabilities.
+
+For example, after selecting a bounded Terra task and confirming High is supported:
+
+~~~text
+agent_type: default
+model: gpt-6.1-terra
+reasoning_effort: high
+fork_turns: none
+~~~
+
+High is illustrative, not a fixed Terra default. Inspect the current tool metadata
+when selecting and invoking a subagent. Live capabilities may narrow this allowed set; they do not authorize older or
 unlisted models. Reuse `gpt-6-astra` only for a bounded independent task, not to
 repeat parent work. If the selected model, effort, explicit
 spawn control, or required tool is unavailable, conflicting, or unobservable, fail
@@ -93,7 +110,8 @@ the source of each value. Chosen values are not the same as runtime-confirmed va
 
 For substantial implementation, the parent first inspects the complete accumulated
 diff and reruns the requested checks. It then starts a fresh read-only reviewer in a
-new context. The reviewer can be `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-sol`, or `gpt-6-luna`,
+new context. The reviewer can be `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6.1-terra`,
+`gpt-6-sol`, or `gpt-6-luna`,
 with an effort supported by live metadata, and must receive the exact change set,
 interfaces, constraints, and verification evidence. Ask it to return:
 
