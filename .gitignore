@@ -3,3 +3,17 @@
 logs/
 __pycache__/
 .agenttrail/
+
+# Local credentials, sessions, and private working material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+credentials.json
+/.codex/
+/.codex-marketplace-install.json
+/sessions/
+/rollouts/
+/private/

@@ -1,5 +1,7 @@
 # Astra Advisor
 
+[English](README.md) | [繁體中文（香港）](README.zh-HK.md) | [简体中文](README.zh-CN.md)
+
 GPT-6 routing edition maintained by Chamotrans, based on [DannyMac180/astra-advisor](https://github.com/DannyMac180/astra-advisor).
 
 **GPT-6 Astra plans the work, chooses useful bounded delegation dynamically, and
@@ -151,3 +153,13 @@ codex plugin add astra-advisor@astra-advisor
 
 For operational details, read
 [the orchestration operations reference](plugins/astra-advisor/skills/orchestration/references/operations.md).
+
+## Privacy and contributions
+
+Use a public handle and your GitHub-provided noreply email for commits. Before
+sharing a patch, issue, screenshot, or log, remove personal paths, contact details,
+client material, credentials, and session transcripts. Examples and cost receipts
+shared publicly must use synthetic data, not real session records. The ignore rules
+help prevent accidental additions; they do not sanitize tracked files or Git
+history. Public project attribution and the MIT copyright notice are retained.
+See [LICENSE](LICENSE).
